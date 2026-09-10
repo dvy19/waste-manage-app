@@ -2,6 +2,7 @@ import { LoginReq, RegisterReq, RegisterRes } from "@/models/AuthModels";
 
 import api from '../api/axios'
 import { endpoints } from "@/api/endpoints";
+import { LocationDetails, LocationResponse } from "@/models/UserModels";
 
 export const authService={
 
@@ -18,6 +19,13 @@ export const authService={
         const login=await  api.post(endpoints.LOGIN,req)
 
         return login.data
+    },
+
+    createProfile:async(req:LocationDetails):Promise<LocationResponse>=>{
+
+        const data=await api.post(endpoints.CREATE_PROFILE , req)
+
+        return data.data
     }
 
 }

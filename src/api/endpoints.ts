@@ -1,7 +1,9 @@
  
  export const endpoints={
 
-    REGISTER:"auth/register",
-    LOGIN:"auth/login",
+    REGISTER:"user/register",
+    LOGIN:"user/login",
+
+    CREATE_PROFILE:"user/create-profile"
 
  }

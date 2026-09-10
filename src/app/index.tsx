@@ -38,9 +38,9 @@ export default function GetStarted() {
 
 
   return (
-      <View>
+      <View style={styles.container}>
          <TouchableOpacity
-         style={styles.button}
+         
           activeOpacity={0.4}
           onPress={() => router.push('/(auth)/register')}
         >
@@ -50,10 +50,15 @@ export default function GetStarted() {
   );
 };
 
-const styles=StyleSheet.create({
+const styles=StyleSheet.create(
+    {
 
-  button:{
-    margin:20
-  }
+        container:{
+            flex:1,
+            alignItems:'center',
+            justifyContent:'center'
+        }
 
-})
+
+}
+)
