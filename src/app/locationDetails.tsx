@@ -41,6 +41,8 @@ const locationDetails = () => {
 
         const res=await authService.createProfile(data)
 
+        router.push('/(main)/(tabs)/home')
+
 
     }
     catch(err){
@@ -107,10 +109,9 @@ const locationDetails = () => {
 
         
 
-       
-
+      
         {/* Submit Button */}
-        <TouchableOpacity style={styles.button} onPress={()=>{router.push('./(main)/(tabs)/home')}}>
+        <TouchableOpacity style={styles.button} onPress={location}>
           <Text style={styles.buttonText}>Save Details</Text>
         </TouchableOpacity>
       </ScrollView>

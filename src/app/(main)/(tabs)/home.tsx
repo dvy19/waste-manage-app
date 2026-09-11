@@ -27,6 +27,7 @@ const home = () => {
 const styles=StyleSheet.create(
 
     
+    
     {
 
         button:{
