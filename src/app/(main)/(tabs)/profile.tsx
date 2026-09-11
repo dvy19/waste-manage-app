@@ -9,7 +9,9 @@ import {
   SafeAreaView,
 } from 'react-native';
 
-import ActionCard from '@/component/profileActionCard';
+import ActionCard from '../../../component/profileActionCard';
+
+import{ router} from 'expo-router'
 
 
 const ProfileScreen: React.FC = () => {
@@ -42,7 +44,7 @@ const ProfileScreen: React.FC = () => {
           <ActionCard
             title="Track Item Requests"
             subtitle="View status of your active and past items"
-            onPress={() => console.log('Navigate to Track Requests')}
+            onPress={() => router.push('/trackScreen')}
           />
 
           <ActionCard
@@ -61,7 +63,7 @@ const ProfileScreen: React.FC = () => {
         {/* Logout Button */}
         <TouchableOpacity
           style={styles.logoutButton}
-          onPress={() => console.log('Log out pressed')}
+          onPress={() => router.push('/(auth)/login')}
         >
           <Text style={styles.logoutText}>Log Out</Text>
         </TouchableOpacity>

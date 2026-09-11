@@ -111,7 +111,7 @@ const locationDetails = () => {
 
       
         {/* Submit Button */}
-        <TouchableOpacity style={styles.button} onPress={location}>
+        <TouchableOpacity style={styles.button} onPress={()=>router.push('/(main)/(tabs)/home')}>
           <Text style={styles.buttonText}>Save Details</Text>
         </TouchableOpacity>
       </ScrollView>
