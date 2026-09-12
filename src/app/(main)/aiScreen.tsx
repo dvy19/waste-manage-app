@@ -18,14 +18,25 @@ interface IdentificationResult {
   ideas: string[];
 }
 
+import { WasteAnalysis } from '@/models/reuseIdeas';
+
+import {aiService} from '../../service/aiService'
+
 export const ImageUploadScreen: React.FC = () => {
+
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [result, setResult] = useState<IdentificationResult | null>(null);
 
-  // Function to pick image using Expo ImagePicker
+  const [analysis, setAnalysis] = useState<WasteAnalysis | null>(null);
+
+  const[image,setImage]=useState<{
+          uri: string;
+          name: string;
+          type: string;
+        } | null>(null);
+
   const handlePickImage = async () => {
-    // Request permission to access media library
+
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -37,39 +48,46 @@ export const ImageUploadScreen: React.FC = () => {
       return;
     }
 
-    // Launch image picker UI
     const pickerResult = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
       allowsEditing: true,
       quality: 0.8,
     });
 
-    // If user selects an image
+    if (!pickerResult.canceled) {
+      const asset = pickerResult.assets[0];
+
+      setImage({
+        uri: asset.uri,
+        name: asset.fileName ?? "item_reuse.jpg",
+        type: asset.mimeType ?? "image/jpeg",
+      });
+    }
+
     if (!pickerResult.canceled && pickerResult.assets.length > 0) {
       setImageUri(pickerResult.assets[0].uri);
-      setResult(null); // Clear previous result on selecting a new image
     }
   };
 
   // Function to handle submitting image (Simulated backend processing)
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     if (!imageUri) return;
 
     setLoading(true);
 
-    // Mock response logic
-    setTimeout(() => {
-      setLoading(false);
-      setResult({
-        identifiedName: 'Plastic Bottle',
-        ideas: [
-          'Planting cutouts & mini pots',
-          'DIY Pen / Pencil stand',
-          'Bird feeder',
-          'Self-watering planter',
-        ],
-      });
-    }, 1500);
+    try{
+
+        const data=await aiService.reuseIdea({
+          image
+        })
+
+        setAnalysis(data) 
+    }
+    catch(err){
+      console.log(`${err}`)
+    }
+
+    
   };
 
   return (
@@ -113,7 +131,7 @@ export const ImageUploadScreen: React.FC = () => {
           )}
         </TouchableOpacity>
 
-        {/* Response Card */}
+        {/* Response Card 
         {result && (
           <View style={styles.responseCard}>
             <Text style={styles.badgeLabel}>IDENTIFIED ITEM</Text>
@@ -130,6 +148,7 @@ export const ImageUploadScreen: React.FC = () => {
             ))}
           </View>
         )}
+          */}
 
       </ScrollView>
     </SafeAreaView>

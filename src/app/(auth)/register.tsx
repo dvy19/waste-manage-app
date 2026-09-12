@@ -11,6 +11,9 @@ import {
   SafeAreaView,
 } from 'react-native';
 
+import { ToastAndroid } from "react-native";
+
+
 import {router} from 'expo-router'
 
 const register = () => {
@@ -21,7 +24,7 @@ const register = () => {
     const[name,setName]=useState('')
 
     
-/*
+
     const register=async()=>{
 
       console.log("clicked")
@@ -35,14 +38,21 @@ const register = () => {
 
             console.log(res)
 
-            router.push('./locationDetails')
+            // instead of this, Expo + React Native, react-native-toast-message is quite simple.
+
+            ToastAndroid.show(
+              "Login successful!",
+              ToastAndroid.SHORT
+            );
+
+            router.push('/locationDetails')
         }
         catch(err){
             console.log(`${err}`)
         }
 
     }
-*/
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -88,7 +98,7 @@ const register = () => {
           />
         </View>
 
-        <TouchableOpacity style={styles.button}  onPress={()=>router.push('/locationDetails')}>
+        <TouchableOpacity style={styles.button}  onPress={register}>
           <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>
 
