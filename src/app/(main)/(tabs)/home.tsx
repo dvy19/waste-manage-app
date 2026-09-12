@@ -1,5 +1,5 @@
 import { View, Text , TouchableOpacity , StyleSheet , FlatList } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import {router} from 'expo-router'
 
@@ -7,6 +7,10 @@ import MetricCard from '../../../component/userDashCard'
 
 import CentreCard from '../../../component/centerCard'
 import { CentreData } from '../../../component/centerCard'
+import { UserStats } from '@/models/ItemModels'
+import { itemService } from '@/service/itemService'
+import { useFocusEffect } from  "expo-router";
+import { useCallback } from "react";
 const CENTRES_DATA: CentreData[] = [
   {
     id: '1',
@@ -29,12 +33,37 @@ const CENTRES_DATA: CentreData[] = [
 const home = () => {
 
 
+  // initially it is undefined, hence will be error if we use property.
+  const[stats,setStats]=useState<UserStats>()
+
+  const getStats=async()=>{
+
+    try{
+
+      const data=await itemService.getUserStats()
+
+      console.log(data)
+      setStats(data)
+    }
+    catch(err){
+      console.log(`${err}`)
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+        getStats();
+    }, [])
+);
+
+
   return (
     <View style={styles.container}>
 
         <View style={styles.grid}>
-                <MetricCard title="Items added" value={20} />
-                <MetricCard title="Points" value={250} />
+          {/*nullish coalescing operator.*/ }
+                <MetricCard title="Items added" value={stats?.stats.itemsAdded ?? 0} />
+                <MetricCard title="Points" value={stats?.stats.points ?? 0} />
                 <MetricCard title="Reused" value={12} />
                 <MetricCard title="NA" value={0} />
         </View>
@@ -69,21 +98,13 @@ const styles=StyleSheet.create(
     
     {
 
-      
-     
-
       aiButton:{
-
         backgroundColor:"red",
         padding:10,
         borderRadius:"50%",
         position:"absolute",
         bottom:120,
         right:40,
-
-
-
-
       },
 
         button:{

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,6 +12,9 @@ import {
 import ActionCard from '../../../component/profileActionCard';
 
 import{ router} from 'expo-router'
+import { UserProfileRes } from '@/models/UserModels';
+import { authService } from '@/service/authService';
+import { tokenStorage } from '@/service/tokenStorage';
 
 
 const ProfileScreen: React.FC = () => {
@@ -23,6 +26,33 @@ const ProfileScreen: React.FC = () => {
     profilePic: 'https://via.placeholder.com/150', // Replace with user image URL or local asset
   };
 
+  const[profile,setProfile]=useState<UserProfileRes>();
+
+  const logOut=async()=>{
+
+    await tokenStorage.clearTokens()
+
+    router.push('/(auth)/login')
+  }
+
+
+  const getProf=async()=>{
+
+    try{
+      const data=await authService.getUser()
+
+      console.log(data)
+      setProfile(data)
+    }
+    catch(err){
+      console.log(`${err}`)
+    }
+  }
+
+  useEffect(()=>{
+    getProf()
+  } , []);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -32,9 +62,9 @@ const ProfileScreen: React.FC = () => {
             source={{ uri: user.profilePic }}
             style={styles.profileImage}
           />
-          <Text style={styles.userName}>{user.name}</Text>
-          <Text style={styles.userEmail}>{user.email}</Text>
-          <Text style={styles.userLocation}>📍 {user.location}</Text>
+          <Text style={styles.userName}>{profile?.user.user.name}</Text>
+          <Text style={styles.userEmail}>{profile?.user.user.email}</Text>
+          <Text style={styles.userLocation}>📍 {profile?.profile.address}</Text>
         </View>
 
         {/* Action Items List */}
@@ -63,7 +93,7 @@ const ProfileScreen: React.FC = () => {
         {/* Logout Button */}
         <TouchableOpacity
           style={styles.logoutButton}
-          onPress={() => router.push('/(auth)/login')}
+          onPress={logOut}
         >
           <Text style={styles.logoutText}>Log Out</Text>
         </TouchableOpacity>

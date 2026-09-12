@@ -1,3 +1,5 @@
+import { RegisterRes } from "./AuthModels";
+
 export interface LocationDetails{
 
     pinCode:string,
@@ -17,3 +19,10 @@ export interface LocationResponse{
     data:LocationDetails
 }
 
+
+export interface UserProfileRes{
+
+    message:string,
+    profile:LocationDetails,
+    user:RegisterRes
+}

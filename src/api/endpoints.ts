@@ -6,6 +6,13 @@
 
     CREATE_PROFILE:"user/create-profile",
 
-    REUSE_ITEMS:"item/analyze-waste"
+    REUSE_ITEMS:"item/analyze-waste",
+    CREATE_ITEM:"item/create-item",
+
+    USER_STATS:"item/get-user-stats",
+
+    GET_USER_PROF:'user/get-profile',
+
+    TRACK_ITEM:(trackingId : string)=>`item/get-item-id/${trackingId}`
 
  }

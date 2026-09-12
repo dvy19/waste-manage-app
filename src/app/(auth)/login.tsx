@@ -27,6 +27,7 @@ const login = () => {
             const res=await authService.login(data)
 
             console.log(res)
+            router.push('/home')
         }
         catch(err){
             console.log(`${err}`)

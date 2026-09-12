@@ -1,5 +1,6 @@
 import { authService } from '@/service/authService';
 import React, { useState , useEffect } from 'react';
+import { ToastAndroid } from "react-native";
 import {
   StyleSheet,
   Text,
@@ -35,12 +36,15 @@ const locationDetails = () => {
             pinCode:pincode,
             coordinates:coordinates,
             profile:profileImage
-
-
         }
 
         const res=await authService.createProfile(data)
 
+         ToastAndroid.show(
+                  "Successful!",
+                  ToastAndroid.SHORT
+                );
+                
         router.push('/(main)/(tabs)/home')
 
 
@@ -111,7 +115,7 @@ const locationDetails = () => {
 
       
         {/* Submit Button */}
-        <TouchableOpacity style={styles.button} onPress={()=>router.push('/(main)/(tabs)/home')}>
+        <TouchableOpacity style={styles.button} onPress={location}>
           <Text style={styles.buttonText}>Save Details</Text>
         </TouchableOpacity>
       </ScrollView>

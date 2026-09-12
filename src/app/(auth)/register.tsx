@@ -15,6 +15,7 @@ import { ToastAndroid } from "react-native";
 
 
 import {router} from 'expo-router'
+import { tokenStorage } from '@/service/tokenStorage';
 
 const register = () => {
 
@@ -33,10 +34,15 @@ const register = () => {
 
             const data:RegisterReq={email:email , password:password , name:name, role:role}
 
+
             console.log(data)
             const res=await authService.register(data)
 
             console.log(res)
+
+            await tokenStorage.saveTokens(res.token)
+
+
 
             // instead of this, Expo + React Native, react-native-toast-message is quite simple.
 

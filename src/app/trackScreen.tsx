@@ -8,41 +8,42 @@ import {
   ScrollView,
   SafeAreaView,
 } from 'react-native';
-import { ItemCard, ItemData } from '../component/itemCard';
+import { ItemCard } from '../component/itemCard';
+import { TrackItemRes } from '@/models/ItemModels';
+import { itemService } from '@/service/itemService';
 
-// Dummy database map for demonstration
-const MOCK_ITEMS: Record<string, ItemData> = {
-  '101': {
-    id: '101',
-    name: 'Plastic Bottles',
-    quantity: 15,
-    dateSubmitted: '10 Sep 2026',
-    imageUrl: 'https://via.placeholder.com/150',
-    processingMethod: 'Recycling',
-    status: 'processing',
-  },
-  '102': {
-    id: '102',
-    name: 'Old Garden Shears',
-    quantity: 2,
-    dateSubmitted: '02 Sep 2026',
-    imageUrl: 'https://via.placeholder.com/150',
-    processingMethod: 'Metal Refurbishing',
-    status: 'finished',
-  },
-};
+
 
 const TrackItem: React.FC = () => {
   const [searchId, setSearchId] = useState<string>('');
-  const [trackedItem, setTrackedItem] = useState<ItemData | null>(null);
+  const [trackedItem, setTrackedItem] = useState<TrackItemRes>();
   const [searched, setSearched] = useState<boolean>(false);
 
-  const handleTrack = () => {
-    if (!searchId.trim()) return;
-    const found = MOCK_ITEMS[searchId.trim()];
-    setTrackedItem(found || null);
-    setSearched(true);
-  };
+  const[trackItem,setTrackItem]=useState<TrackItemRes>();
+
+
+  const track_item=async(trackingId:string)=>{
+
+    try{
+
+      const item=await itemService.trackItem(trackingId)
+      console.log(item)
+      console.log(item.item)
+      setTrackItem(item)
+    }
+    catch(err){
+      console.log(`${err}`)
+    }
+  }
+
+
+    const handleTrack = async () => {
+        if (!searchId) return;
+
+        await track_item(searchId);
+    };
+
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -59,7 +60,6 @@ const TrackItem: React.FC = () => {
               placeholderTextColor="#999"
               value={searchId}
               onChangeText={setSearchId}
-              keyboardType="numeric"
             />
             <TouchableOpacity style={styles.button} onPress={handleTrack}>
               <Text style={styles.buttonText}>Track</Text>
@@ -68,8 +68,8 @@ const TrackItem: React.FC = () => {
         </View>
 
         {/* Display Result */}
-        {trackedItem ? (
-          <ItemCard item={trackedItem} />
+        {trackItem ? (
+          <ItemCard item={trackItem.item}  message={trackItem?.message ?? ""} />
         ) : (
           searched && (
             <View style={styles.notFoundContainer}>

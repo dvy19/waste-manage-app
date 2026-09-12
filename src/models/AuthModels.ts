@@ -24,7 +24,8 @@ export interface RegisterRes{
         name:string,
         role:string,
         id:string
-    }
+    },
+    token:string
 }
 
 /*

@@ -1,36 +1,20 @@
+import { TrackItemRes } from '@/models/ItemModels';
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 
-export type RequestStatus = 'submitted' | 'processing' | 'finished';
 
-export interface ItemData {
-  id: string;
-  name: string;
-  quantity: number;
-  dateSubmitted: string;
-  imageUrl: string;
-  processingMethod: string;
-  status: RequestStatus;
-}
 
-interface ItemCardProps {
-  item: ItemData;
-}
-
-export const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
+export const ItemCard: React.FC<TrackItemRes> = ({ item , message }) => {
   // Helpers to determine timeline active state
-  const isProcessingReached = item.status === 'processing' || item.status === 'finished';
-  const isFinishedReached = item.status === 'finished';
-
+  
   return (
     <View style={styles.card}>
       {/* Item Info Summary */}
       <View style={styles.headerRow}>
-        <Image source={{ uri: item.imageUrl }} style={styles.image} />
         <View style={styles.info}>
           <Text style={styles.name}>{item.name}</Text>
           <Text style={styles.meta}>Quantity: {item.quantity}</Text>
-          <Text style={styles.meta}>Submitted: {item.dateSubmitted}</Text>
+          <Text style={styles.meta}>Submitted: {item.createdAt}</Text>
         </View>
       </View>
 
@@ -44,19 +28,19 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
         <View style={styles.timelineStep}>
           <View style={styles.indicatorContainer}>
             <View style={[styles.dot, styles.dotActive]} />
-            <View style={[styles.line, isProcessingReached && styles.lineActive]} />
+            <View style={[styles.line, item.processingMethod && styles.lineActive]} />
           </View>
           <View style={styles.stepContent}>
             <Text style={styles.stepTitle}>Submitted</Text>
-            <Text style={styles.stepSubtext}>On {item.dateSubmitted}</Text>
+            <Text style={styles.stepSubtext}>On {item.createdAt}</Text>
           </View>
         </View>
 
         {/* Step 2: Processing Status */}
         <View style={styles.timelineStep}>
           <View style={styles.indicatorContainer}>
-            <View style={[styles.dot, isProcessingReached && styles.dotActive]} />
-            <View style={[styles.line, isFinishedReached && styles.lineActive]} />
+            <View style={[styles.dot, item.status && styles.dotActive]} />
+            {/*<View style={[styles.line, isFinishedReached && styles.lineActive]} />*/}
           </View>
           <View style={styles.stepContent}>
             <Text style={styles.stepTitle}>Processing Status</Text>
@@ -69,12 +53,12 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
         {/* Step 3: Finished */}
         <View style={styles.timelineStep}>
           <View style={styles.indicatorContainer}>
-            <View style={[styles.dot, isFinishedReached && styles.dotActive]} />
+            <View style={[styles.dot, item.status && styles.dotActive]} />
           </View>
           <View style={styles.stepContent}>
             <Text style={styles.stepTitle}>Finished</Text>
             <Text style={styles.stepSubtext}>
-              {isFinishedReached ? 'Request completed' : 'Pending completion'}
+              {/*{isFinishedReached ? 'Request completed' : 'Pending completion'}*/}
             </Text>
           </View>
         </View>

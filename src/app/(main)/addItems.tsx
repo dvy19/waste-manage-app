@@ -9,11 +9,15 @@ import {
   SafeAreaView,
   Modal,
   FlatList,
+  Alert
 } from 'react-native';
+
+import {itemService }from '../../service/itemService'
 
 
 import {router} from 'expo-router'
 
+import { ItemReq } from '@/models/ItemModels';
 type CategoryOption =
   | 'dry'
   | 'wet'
@@ -38,6 +42,7 @@ const CATEGORIES: CategoryOption[] = [
 ];
 
 const AddItem: React.FC = () => {
+
   const [name, setName] = useState<string>('');
   const [quantity, setQuantity] = useState<string>('');
   const [weight, setWeight] = useState<string>('');
@@ -48,6 +53,32 @@ const AddItem: React.FC = () => {
     setCategory(selected);
     setIsPickerVisible(false);
   };
+
+  const addItem=async()=>{
+
+    try{
+
+      const qty=Number(quantity)
+      const wgt=Number(weight)
+
+      const data:ItemReq={name, quantity:qty,weight:wgt , category}
+
+      console.log(data)
+      const item=await itemService.createItem(data)
+
+      console.log(item)
+      
+      Alert.alert(
+          "Item Added Successfully 🎉",
+          "You earned 10 points!"
+      );
+
+
+    }
+    catch(err){
+      console.log(`${err}`)
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -84,6 +115,7 @@ const AddItem: React.FC = () => {
         <View style={styles.formGroup}>
           <Text style={styles.label}>Quantity</Text>
           <TextInput
+            
             style={styles.input}
             placeholder="Enter quantity"
             placeholderTextColor="#999"
@@ -107,7 +139,7 @@ const AddItem: React.FC = () => {
         </View>
 
         {/* Save Button */}
-        <TouchableOpacity style={styles.button} onPress={()=>router.back()}>
+        <TouchableOpacity style={styles.button} onPress={addItem}>
           <Text style={styles.buttonText}>Add Item</Text>
         </TouchableOpacity>
       </ScrollView>

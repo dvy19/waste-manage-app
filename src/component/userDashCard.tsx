@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 interface MetricCardProps {
   title: string;
-  value: string | number;
+  value: number |10;
 }
 
 const MetricCard: React.FC<MetricCardProps> = ({ title, value }) => {
